@@ -1,46 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-    <style>
-        body { font-family: 'Instrument Sans', sans-serif; background: #fdfdfc; }
-        .container { max-width: 400px; margin: 60px auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: .5rem; }
-        input { width: 100%; padding: .5rem; border: 1px solid #ccc; border-radius: 4px; }
-        .btn { background: #f53003; color: #fff; border: none; padding: .75rem 1.5rem; border-radius: 4px; cursor: pointer; }
-        .error { color: #f53003; margin-bottom: 1rem; }
-        .link { margin-top: 1rem; display: block; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Register</h2>
-        @if ($errors->any())
-            <div class="error">{{ $errors->first() }}</div>
-        @endif
-        <form method="POST" action="{{ url('/register') }}">
-            @csrf
-            <div class="form-group">
-                <label>Nama</label>
-                <input type="text" name="name" value="{{ old('name') }}" required autofocus>
+@extends('layouts.app')
+
+@section('content')
+    <div class="flex items-center justify-center min-h-screen bg-gray-50">
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold text-center text-gray-800">Register</h2>
+
+            @if ($errors->any())
+                <div class="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form class="space-y-5" method="POST" action="{{ url('/register') }}">
+                @csrf
+
+                <div>
+                    <label for="name" class="block mb-2 text-sm font-medium text-gray-700">Nama</label>
+                    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus
+                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" />
+                </div>
+
+                <div>
+                    <label for="email" class="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required
+                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" />
+                </div>
+
+                <div>
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-700">Password</label>
+                    <input id="password" type="password" name="password" required
+                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" />
+                </div>
+
+                <div>
+                    <label for="password_confirmation" class="block mb-2 text-sm font-medium text-gray-700">Konfirmasi
+                        Password</label>
+                    <input id="password_confirmation" type="password" name="password_confirmation" required
+                        class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" />
+                </div>
+
+                <button type="submit"
+                    class="w-full px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-200 font-medium">
+                    Register
+                </button>
+            </form>
+
+            <div class="text-center">
+                <a class="text-sm text-blue-600 hover:underline" href="{{ route('login') }}">
+                    Sudah punya akun? Login
+                </a>
             </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label>Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" required>
-            </div>
-            <button class="btn" type="submit">Register</button>
-        </form>
-        <a class="link" href="{{ route('login') }}">Sudah punya akun? Login</a>
+        </div>
     </div>
-</body>
-</html>
+@endsection

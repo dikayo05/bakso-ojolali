@@ -9,6 +9,8 @@
         @endif
 
         <div class="flex flex-col items-center mb-6">
+            <a href="{{ url('/user') }}"
+                class="self-start mb-4 text-gray-600 hover:underline flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>Kembali</a>
             @if ($bakso->image)
                 <img class="w-48 h-48 object-cover rounded shadow" src="{{ asset('storage/' . $bakso->image) }}" alt="{{ $bakso->nama }}">
             @else
@@ -71,8 +73,6 @@
                     class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition">Beli</button>
                 {{-- <a href="{{ route('pilih.metode.pembayaran', $bakso->id) }}"
                     class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition">Beli bayar</a> --}}
-                <a href="{{ url('/user') }}"
-                    class="text-gray-600 hover:underline ml-auto flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>Kembali ke daftar bakso</a>
             </div>
         </form>
     </div>
