@@ -23,7 +23,7 @@
                     <th>No</th>
                     <th>Nama Bakso</th>
                     <th>Jumlah</th>
-                    <th>Harga</th>
+                    <th>Total Harga</th>
                     <th>Gambar</th>
                     <th>Pesan</th>
                     <th>Status</th>
@@ -36,7 +36,7 @@
                         <td>{{ $i + 1 }}</td>
                         <td>{{ $pesanan->nama }}</td>
                         <td>{{ $pesanan->jumlah }}</td>
-                        <td>Rp{{ number_format($pesanan->harga, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($pesanan->harga * $pesanan->jumlah, 0, ',', '.') }}</td>
                         <td>
                             @if($pesanan->image)
                                 <img src="{{ asset('storage/' . $pesanan->image) }}" alt="{{ $pesanan->nama }}">

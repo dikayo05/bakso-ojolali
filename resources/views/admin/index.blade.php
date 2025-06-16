@@ -99,6 +99,7 @@
                         <th>Nama Bakso</th>
                         <th>Jumlah</th>
                         <th>Pesan</th>
+                        <th>Total Harga</th>
                         <th>Status</th>
                         <th>Update Status</th>
                     </tr>
@@ -108,7 +109,7 @@
                         $pesanans = DB::table('pesanans')
                             ->join('users', 'pesanans.user_id', '=', 'users.id')
                             ->join('baksos', 'pesanans.bakso_id', '=', 'baksos.id')
-                            ->select('pesanans.*', 'users.name as user_name', 'baksos.nama as bakso_nama')
+                            ->select('pesanans.*', 'users.name as user_name', 'baksos.nama as bakso_nama', 'baksos.harga as bakso_harga')
                             ->orderBy('pesanans.created_at', 'desc')
                             ->get();
                     @endphp
@@ -119,6 +120,7 @@
                             <td>{{ $pesanan->bakso_nama }}</td>
                             <td>{{ $pesanan->jumlah }}</td>
                             <td>{{ $pesanan->pesan }}</td>
+                            <td>{{ $pesanan->bakso_harga * $pesanan->jumlah }}</td>
                             <td>{{ $pesanan->status }}</td>
                             <td>
                                 <form action="{{ url('/pesanan/'.$pesanan->id.'/status') }}" method="POST" class="status-form">
