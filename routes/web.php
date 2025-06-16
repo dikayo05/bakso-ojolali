@@ -6,10 +6,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\BaksoController;
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\PembayaranController;
 
 Route::get('/', function () {
-    return view('Auth.login');
-});
+    return view('auth.login');
+})->name('home');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -27,7 +28,7 @@ Route::middleware(['auth'])->group(function () {
         }
         $baksos = DB::table('baksos')->get();
         return view('user.index', compact('baksos'));
-    });
+    })->name('user.index');
 
     Route::get('/bakso/{id}/deskripsi', function ($id) {
         $bakso = DB::table('baksos')->where('id', $id)->first();
@@ -39,4 +40,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
     Route::put('/pesanan/{id}/status', [PesananController::class, 'updateStatus'])->name('pesanan.updateStatus');
     Route::put('/pesanan/{id}/batal', [PesananController::class, 'batal'])->name('pesanan.batal');
+    Route::get('/pilih-metode-pembayaran/{bakso}', [PembayaranController::class, 'showMetodePembayaran'])->name('pilih.metode.pembayaran');
 });

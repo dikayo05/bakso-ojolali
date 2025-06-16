@@ -1,0 +1,1 @@
+<a href="{{ route('pilih.metode.pembayaran', $bakso->id) }}" class="btn btn-primary">Beli</a>

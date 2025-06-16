@@ -1,53 +1,79 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Deskripsi Bakso</title>
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-    <style>
-        body { font-family: 'Instrument Sans', sans-serif; background: #fdfdfc; }
-        .container { max-width: 600px; margin: 60px auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
-        .img { width: 200px; height: 200px; object-fit: cover; border-radius: 10px; background: #f9f9f9; margin-bottom: 1rem; }
-        .nama { font-size: 1.5rem; font-weight: bold; margin-bottom: .5rem; }
-        .harga { color: #f53003; font-weight: bold; font-size: 1.2rem; margin-bottom: 1rem; }
-        .desc-table { width: 100%; margin-bottom: 1rem; }
-        .desc-table td { padding: .3rem .5rem; }
-        .back { display: inline-block; margin-top: 1rem; color: #f53003; text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        @if(session('success'))
-            <div style="color:green; margin-bottom:1rem;">{{ session('success') }}</div>
+@extends('layouts.app')
+
+@section('content')
+    <div class="max-w-2xl mx-auto py-8">
+        @if (session('success'))
+            <div class="mb-4 text-green-700 bg-green-100 border border-green-400 rounded px-4 py-2">
+                {{ session('success') }}
+            </div>
         @endif
-        @if($bakso->image)
-            <img class="img" src="{{ asset('storage/' . $bakso->image) }}" alt="{{ $bakso->nama }}">
-        @else
-            <img class="img" src="https://via.placeholder.com/200x200?text=Bakso" alt="{{ $bakso->nama }}">
-        @endif
-        <div class="nama">{{ $bakso->nama }}</div>
-        <div class="harga">Rp{{ number_format($bakso->harga, 0, ',', '.') }}</div>
-        <table class="desc-table">
-            <tr><td>Jenis</td><td>: {{ $bakso->jenis }}</td></tr>
-            <tr><td>Ukuran</td><td>: {{ $bakso->ukuran }}</td></tr>
-            <tr><td>Isi</td><td>: {{ $bakso->isi }}</td></tr>
-            <tr><td>Tingkat Pedas</td><td>: {{ $bakso->tingkat_pedas }}</td></tr>
-            <tr><td>Topping</td><td>: {{ $bakso->topping }}</td></tr>
-            <tr><td>Kuah</td><td>: {{ $bakso->kuah }}</td></tr>
-        </table>
-        <form method="POST" action="{{ route('pesanan.store') }}">
+
+        <div class="flex flex-col items-center mb-6">
+            @if ($bakso->image)
+                <img class="w-48 h-48 object-cover rounded shadow" src="{{ asset('storage/' . $bakso->image) }}" alt="{{ $bakso->nama }}">
+            @else
+                <img class="w-48 h-48 object-cover rounded shadow" src="https://via.placeholder.com/200x200?text=Bakso" alt="{{ $bakso->nama }}">
+            @endif
+            <div class="mt-4 text-2xl font-bold text-gray-800">{{ $bakso->nama }}</div>
+            <div class="text-lg text-orange-600 font-semibold">Rp{{ number_format($bakso->harga, 0, ',', '.') }}</div>
+        </div>
+
+        <div class="overflow-x-auto mb-6">
+            <table class="w-full text-sm text-left text-gray-700 border rounded-lg">
+                <tbody>
+                    <tr class="border-b">
+                        <td class="py-2 px-4 font-medium">Jenis</td>
+                        <td class="py-2 px-4">: {{ $bakso->jenis }}</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="py-2 px-4 font-medium">Ukuran</td>
+                        <td class="py-2 px-4">: {{ $bakso->ukuran }}</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="py-2 px-4 font-medium">Isi</td>
+                        <td class="py-2 px-4">: {{ $bakso->isi }}</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="py-2 px-4 font-medium">Tingkat Pedas</td>
+                        <td class="py-2 px-4">: {{ $bakso->tingkat_pedas }}</td>
+                    </tr>
+                    <tr class="border-b">
+                        <td class="py-2 px-4 font-medium">Topping</td>
+                        <td class="py-2 px-4">: {{ $bakso->topping }}</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 font-medium">Kuah</td>
+                        <td class="py-2 px-4">: {{ $bakso->kuah }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <form method="POST" action="{{ route('pesanan.store') }}" class="space-y-4">
             @csrf
             <input type="hidden" name="bakso_id" value="{{ $bakso->id }}">
-            <div style="margin-bottom:1rem;">
-                <label for="jumlah" style="display:block;margin-bottom:4px;">Jumlah:</label>
-                <input type="number" id="jumlah" name="jumlah" min="1" max="{{ $bakso->stok }}" value="1" style="width:100px;border-radius:6px;border:1px solid #ccc;padding:.5rem;" required>
+
+            <div>
+                <label for="jumlah" class="block mb-1 text-sm font-medium text-gray-700">Jumlah:</label>
+                <input type="number" id="jumlah" name="jumlah" min="1" max="{{ $bakso->stok }}" value="1"
+                    class="block w-28 rounded-lg border border-gray-300 p-2.5 focus:ring-orange-500 focus:border-orange-500"
+                    required>
             </div>
-            <div style="margin-bottom:1rem;">
-                <label for="pesan" style="display:block;margin-bottom:4px;">Pesan untuk penjual (opsional):</label>
-                <textarea id="pesan" name="pesan" rows="2" style="width:100%;border-radius:6px;border:1px solid #ccc;padding:.5rem;"></textarea>
+
+            <div>
+                <label for="pesan" class="block mb-1 text-sm font-medium text-gray-700">Pesan untuk penjual (opsional):</label>
+                <textarea id="pesan" name="pesan" rows="2"
+                    class="block w-full rounded-lg border border-gray-300 p-2.5 focus:ring-orange-500 focus:border-orange-500"></textarea>
             </div>
-            <button type="submit" style="background:#f53003;color:#fff;padding:.7rem 2rem;border:none;border-radius:6px;font-size:1rem;cursor:pointer;">Beli</button>
-            <a class="back" href="{{ url('/user') }}" style="margin-left:1rem;">&#8592; Kembali ke daftar bakso</a>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition">Beli</button>
+                {{-- <a href="{{ route('pilih.metode.pembayaran', $bakso->id) }}"
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition">Beli bayar</a> --}}
+                <a href="{{ url('/user') }}"
+                    class="text-gray-600 hover:underline ml-auto flex items-center"><svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>Kembali ke daftar bakso</a>
+            </div>
         </form>
     </div>
-</body>
-</html>
+@endsection

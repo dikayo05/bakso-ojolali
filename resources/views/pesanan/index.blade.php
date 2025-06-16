@@ -1,71 +1,70 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Pesanan Saya</title>
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-    <style>
-        body { font-family: 'Instrument Sans', sans-serif; background: #fdfdfc; }
-        .container { max-width: 700px; margin: 60px auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px #0001; }
-        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
-        th, td { border: 1px solid #eee; padding: 0.75rem; text-align: left; }
-        th { background: #f53003; color: #fff; }
-        tr:nth-child(even) { background: #f9f9f9; }
-        img { max-width: 60px; max-height: 60px; }
-        .back { display: inline-block; margin-top: 1rem; color: #f53003; text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>Pesanan Saya</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Bakso</th>
-                    <th>Jumlah</th>
-                    <th>Total Harga</th>
-                    <th>Gambar</th>
-                    <th>Pesan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($pesanans as $i => $pesanan)
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6">Pesanan Saya</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left text-gray-700 border border-gray-200 rounded-lg">
+                <thead class="text-xs uppercase bg-gray-100">
                     <tr>
-                        <td>{{ $i + 1 }}</td>
-                        <td>{{ $pesanan->nama }}</td>
-                        <td>{{ $pesanan->jumlah }}</td>
-                        <td>Rp {{ number_format($pesanan->harga * $pesanan->jumlah, 0, ',', '.') }}</td>
-                        <td>
-                            @if($pesanan->image)
-                                <img src="{{ asset('storage/' . $pesanan->image) }}" alt="{{ $pesanan->nama }}">
-                            @else
-                                -
-                            @endif
-                        </td>
-                        <td>{{ $pesanan->pesan }}</td>
-                        <td>{{ $pesanan->status }}</td>
-                        <td>
-                            @if($pesanan->status == 'menunggu')
-                                <form action="{{ url('/pesanan/'.$pesanan->id.'/batal') }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" style="background:#dc3545;color:#fff;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;" onclick="return confirm('Batalkan pesanan ini?')">Batalkan</button>
-                                </form>
-                            @else
-                                -
-                            @endif
-                        </td>
+                        <th class="px-4 py-3">No</th>
+                        <th class="px-4 py-3">Nama Bakso</th>
+                        <th class="px-4 py-3">Jumlah</th>
+                        <th class="px-4 py-3">Total Harga</th>
+                        <th class="px-4 py-3">Gambar</th>
+                        <th class="px-4 py-3">Pesan</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Aksi</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="8">Belum ada pesanan.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-        <a class="back" href="{{ url('/user') }}">&#8592; Kembali ke daftar bakso</a>
+                </thead>
+                <tbody>
+                    @forelse($pesanans as $i => $pesanan)
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-4 py-3">{{ $i + 1 }}</td>
+                            <td class="px-4 py-3">{{ $pesanan->nama }}</td>
+                            <td class="px-4 py-3">{{ $pesanan->jumlah }}</td>
+                            <td class="px-4 py-3">Rp {{ number_format($pesanan->harga * $pesanan->jumlah, 0, ',', '.') }}</td>
+                            <td class="px-4 py-3">
+                                @if ($pesanan->image)
+                                    <img src="{{ asset('storage/' . $pesanan->image) }}" alt="{{ $pesanan->nama }}" class="w-16 h-16 object-cover rounded">
+                                @else
+                                    <span class="text-gray-400">-</span>
+                                @endif
+                            </td>
+                            <td class="px-4 py-3">{{ $pesanan->pesan }}</td>
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 rounded text-xs
+                                    @if($pesanan->status == 'menunggu') bg-yellow-100 text-yellow-800
+                                    @elseif($pesanan->status == 'diproses') bg-blue-100 text-blue-800
+                                    @elseif($pesanan->status == 'selesai') bg-green-100 text-green-800
+                                    @else bg-gray-100 text-gray-800 @endif">
+                                    {{ $pesanan->status }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3">
+                                @if ($pesanan->status == 'menunggu')
+                                    <form action="{{ url('/pesanan/' . $pesanan->id . '/batal') }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit"
+                                            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                                            onclick="return confirm('Batalkan pesanan ini?')">
+                                            Batalkan
+                                        </button>
+                                    </form>
+                                @else
+                                    <span class="text-gray-400">-</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="px-4 py-6 text-center text-gray-500">Belum ada pesanan.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <a class="inline-block mt-6 text-blue-600 hover:underline" href="{{ url('/user') }}">&#8592; Kembali ke daftar bakso</a>
     </div>
-</body>
-</html>
+@endsection

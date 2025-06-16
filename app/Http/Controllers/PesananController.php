@@ -20,7 +20,6 @@ class PesananController extends Controller
             'bakso_id' => $request->bakso_id,
             'jumlah' => $request->jumlah,
             'pesan' => $request->pesan,
-            'total_harga' => $request->total_harga,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
